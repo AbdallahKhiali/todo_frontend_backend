@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri&family=Cairo&family=Dancing+Script:wght@600&family=Montserrat&family=Noto+Sans&family=Open+Sans&family=Roboto&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+:root {
+    --primaryColor: #87CEEB;
+    --successColor: #90EE90;
+    --warningColor: #FFA07A;
+    --dangerColor: #FFC0CB;
+    --bgColor: #141414;
+
+}
+
+
+html {
+    font-family: 'Open Sans', sans-serif;
+    background-color: var(--bgColor);
+    color: #ccc;
+}
+
+.icon {
+    height: 24px;
+    width: 24px;
+}
+
+.button {
+    height: 36px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    color: white;
+}
+
+.primary-btn {
+    background-color: var(--primaryColor);
+}

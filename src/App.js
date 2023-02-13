@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import Login from './components/Login'
+import Signup from './components/Signup'
+import Todos from './components/Todos'
+import { AuthContext } from './contexts/Auth'
+import { GeneralContext } from './contexts/general'
 
-function App() {
+const App = () => {
+  const { isAuth } = useContext(AuthContext)
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Routes>
+
+      {<Route path="/" exact element={isAuth ? <Todos /> : <Login />} />}
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+
+    </Routes>
+  )
 }
 
-export default App;
+export default App

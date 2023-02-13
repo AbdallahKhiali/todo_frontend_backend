@@ -1,0 +1,85 @@
+.modal-overlay {
+    background-color: #0000009e;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+
+
+    .modal {
+        background-color: #242424;
+        height: 60vh;
+        width: 50vw;
+        overflow-y: scroll;
+        border-radius: 8px;
+    }
+}
+
+
+
+.formulaire {
+    width: 100%;
+    gap: 8px;
+}
+
+
+
+.formulaire_container {
+    display: flex;
+    height: fit-content;
+    align-items: center;
+    margin: 12px 0;
+    position: relative;
+}
+
+label {
+    width: 96px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.formulaire_input {
+    height: 48px;
+    border: none;
+    outline: none;
+    border-radius: 4px;
+    padding: 0 8px;
+    width: 80%;
+    background-color: #ececec;
+}
+
+.formulaire_input::placeholder {
+    font-family: 'Cairo', sans-serif;
+    letter-spacing: 0.01em;
+    font-size: 16px;
+}
+
+textarea {
+    resize: none;
+    height: 180px !important;
+    padding: 16px !important;
+}
+
+.modal-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    width: 60%;
+    margin: 0 auto;
+
+}
+
+
+.info-content {
+    background-color: #ececec;
+    color: black;
+    padding: 1rem;
+    margin: 8px;
+    border-radius: 8px;
+    display: flex;
+    gap: 12px;
+}
