@@ -5,6 +5,7 @@ import { GeneralContext } from '../../contexts/general'
 import { TodoContext } from '../../contexts/todo'
 import Modal from '../../utils/modal'
 import "./todos.scss"
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 
 
 
@@ -17,10 +18,32 @@ const Todos = () => {
     const { isModal, setModal } = useContext(GeneralContext)
     const { userId } = useContext(AuthContext)
 
+    const [currentId, setCurrentId] = useState(null)
+
     useEffect(() => {
         getUsersTodos(userId)
-    }, [todos])
+    }, [])
 
+
+    const onDragEnd = result => {
+
+        console.log(result)
+        const { destination, source } = result;
+
+        if (!destination) {
+            return;
+        }
+
+        if (destination.index === source.index) {
+            return;
+        }
+
+        const newTodos = Array.from(todos);
+        const [removed] = newTodos.splice(source.index, 1);
+        newTodos.splice(destination.index, 0, removed);
+
+        setTodos(newTodos);
+    };
 
 
     return (
@@ -65,31 +88,30 @@ const Todos = () => {
             {/* --------------------------- */}
 
             {/* info-modal */}
-            {
-                istodoModal && <Modal>
-                    <div className='form-todo' >
-                        <div className="formulaire col-2 ">
-                            <div className="formulaire_container info-content ">
-                                <p>title</p>
-                                <p>{todoDetails?.title}</p>
-                            </div>
-                            <div className="formulaire_container info-content ">
-                                <p>dueTo</p>
-                                <p>{todoDetails?.dueTo}</p>
-                            </div>
-
-                            <div className="formulaire_container info-content ">
-                                <p>description</p>
-                                <p>{todoDetails?.description}</p>
-                            </div>
+            {istodoModal && <Modal>
+                <div className='form-todo' >
+                    <div className="formulaire col-2 ">
+                        <div className="formulaire_container info-content ">
+                            <p>title</p>
+                            <p>{todoDetails?.title}</p>
+                        </div>
+                        <div className="formulaire_container info-content ">
+                            <p>dueTo</p>
+                            <p>{todoDetails?.dueTo}</p>
                         </div>
 
-                        <div className='button primary-btn ' onClick={() => { setTodoModal(false) }} >
-                            close
+                        <div className="formulaire_container info-content ">
+                            <p>description</p>
+                            <p>{todoDetails?.description}</p>
                         </div>
                     </div>
-                </Modal>
-            }
+
+                    <div className='button primary-btn ' onClick={() => { setTodoModal(false) }} >
+                        close
+                    </div>
+                </div>
+            </Modal>}
+
             {/* info-modal */}
             <div onClick={() => { localStorage.clear(); window.location.reload() }} className='button primary-btn logout ' >
                 Logout
@@ -99,21 +121,37 @@ const Todos = () => {
             <div className='button primary-btn add-todo ' onClick={() => { setModal(true) }} >
                 <img src={require('../../assets/add.svg').default} alt="add" />
             </div>
-            <ul className='todo_list' >
-                {
-                    // console.log(todos)
-                }
-                {todos && todos.map((todo, index) => (
-                    <li key={index} >
-                        <span> {todo?.title}</span>
-                        <div className='todos_buttons' >
-                            <img src={require('../../assets/info.svg').default} alt="icon_todo" className='todo_icon info ' onClick={() => { getTodoById(todo._id); setTodoModal(true) }} />
-                            <img src={require('../../assets/delete.svg').default} alt="icon_todo" className='todo_icon delete ' onClick={() => { deleteTodo(todo._id, userId) }} />
-                        </div>
+          
+            <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId={`droppable-${currentId}`}>
+                    {provided => (
+                        <ul className='todo_list' ref={provided.innerRef} {...provided.droppableProps}>
+                            {todos.map((todo, index) => (
+                                <Draggable key={todo._id} draggableId={todo._id} index={index}   >
+                                    {provided => (
+                                        <li
+                                            onMouseEnter={() => setCurrentId(todo._id)}
+                                            onClick={() => setCurrentId(todo._id)}
+                                            className='todo_item'
+                                            ref={provided.innerRef}
+                                            {...provided.draggableProps}
+                                            {...provided.dragHandleProps}
+                                        >
+                                            {todo.title}
+                                            <div className='todos_buttons' >
+                                                <img src={require('../../assets/info.svg').default} alt="icon_todo" className='todo_icon info ' onClick={() => { getTodoById(todo._id); setTodoModal(true) }} />
+                                                <img src={require('../../assets/delete.svg').default} alt="icon_todo" className='todo_icon delete ' onClick={() => { deleteTodo(todo._id, userId) }} />
+                                            </div>
+                                        </li>
+                                    )}
+                                </Draggable>
+                            ))}
+                            {provided.placeholder}
+                        </ul>
+                    )}
+                </Droppable>
+            </DragDropContext>
 
-                    </li>
-                ))}
-            </ul>
 
         </div>
     )

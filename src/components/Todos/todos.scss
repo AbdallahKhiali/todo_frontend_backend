@@ -35,7 +35,7 @@
 
     .todo_list {
         list-style: none;
-
+        height: 85vh;
 
         li {
             background-color: #000;
@@ -45,6 +45,7 @@
             cursor: pointer;
             display: flex;
             justify-content: space-between;
+            z-index: 9999999999999999999999999;
 
             .todos_buttons {
                 width: 200px;
